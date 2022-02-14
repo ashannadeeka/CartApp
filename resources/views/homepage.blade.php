@@ -4,91 +4,142 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(51, 51, 51)">
     <div class="container">
-        <a class="navbar-brand" href="#">CRUD App Laravel</a>
+        <a class="navbar-brand" href="#">Cart App</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-flow: row-reverse;">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">New User</a></li>
-                <li class="nav-item"><a class="nav-link ml-4" href="{{url('registered-users')}}">View Users</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Add Product</a></li>
+                <li class="nav-item"><a class="nav-link ml-4" href="{{url('view-cart')}}">Cart (<span id="cart_id">0</span>)</a></li>
             </ul>
         </div>
     </div>
 </nav>
 <header class="py-3 bg-image-full" style="background-image: url('https://image.freepik.com/free-vector/blue-wall-with-spot-lights-background_52683-42963.jpg')">
-    <div class="text-center my-5 pt-4">
+    <div class="text-center my-4 pt-4">
     </div>
 </header>
 <section class="py-3">
     <div class="container my-3">
         <div class="row justify-content-center" id="page_starts">
             <div class="col-lg-7">
-                <h2>User Registration</h2>
+                <h2>Add New Product</h2>
                 <hr>
                 <!-- fetch alerts -->
                 <div class="form-group">
                     @include('components.alerts')
                 </div>
 
-                <form action="{{url('save-new-user')}}" method="POST" id="user_form">
+                <form action="{{url('save-new-product')}}" method="POST" id="product_form">
                     @csrf
                     <div class="mb-3">
-                        <div class="row">
-                            <div class="col">
-                                <label for="first_name" class="form-label">First name</label>
-                                <input type="text" class="form-control" id="first_name" name="first_name" required>
-                            </div>
-                            <div class="col">
-                                <label for="last_name" class="form-label">Last name</label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" required>
-                            </div>
-                        </div>
-                        <span id="name_err" class="form-text text-danger text-sm"></span>
+                        <label for="p_name" class="form-label">Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="p_name" name="p_name" required>
+                        <span id="p_name_err" class="form-text text-danger text-sm"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
-                        <span id="email_err" class="form-text text-danger text-sm"></span>
+                        <label for="unit_price" class="form-label">Unit Price <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="unit_price" name="unit_price" required>
+                        <span id="price_err" class="form-text text-danger text-sm"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="contact_number" class="form-label">Contact number</label>
-                        <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="0711234567" pattern="[0-9]+" maxlength="12" required>
-                        <span id="phone_err" class="form-text text-danger text-sm"></span>
+                        <label for="qty_id" class="form-label">Quantity <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control col-2" id="qty_id" name="qty" required>
+                        <span id="qty_err" class="form-text text-danger text-sm"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="dob" class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control col-6" id="dob" name="dob" max="{{ now()->toDateString('Y-m-d') }}" required>
-                        <span id="dob_err" class="form-text text-danger text-sm"></span>
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        <span id="description_err" class="form-text text-danger text-sm"></span>
                     </div>
-                    <div class="mb-3">
-                        <label for="gender" class="form-label">Gender</label><br>
-                        <select class="form-select col-2" name="gender">
-                            <option value="male" selected>Male</option>
-                            <option value="female">Female</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
-                    </div>
-                    <div class="mb-3">
-                        <label for="con_password" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="con_password">
-                        <span id="password_err" class="form-text text-danger text-sm"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Role</label><br>
-                        <select class="form-select col-2" name="role">
-                            <option value="1" selected>User</option>
-                            <option value="0">Admin</option>
-                        </select>
-                    </div>
-                    <span id="overall_err" class="form-text text-danger text-sm"></span>
                     <hr>
                     <div class="mb-3">
-                        <input type="button" class="btn btn-primary shadow px-2 col-3" value="Save" onclick="submitForm()">
-                        <input type="button" class="btn btn-light btn-outline-secondary float-right px-2 col-2" value="Reset Form" onclick="resetForm()">
+                        <input type="button" class="btn btn-primary shadow px-2 col-3" value="Add New" onclick="submitForm()">
+                        <input type="button" class="btn btn-light btn-outline-secondary float-right px-2 col-2" value="Clear" onclick="resetForm()">
                     </div>
                 </form>
+            </div>
+        </div>
+        <br><hr>
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <h2>Products List</h2>
+                <hr>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th scope="col">Qty.</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($product as $pro)
+                                    <tr>
+                                        <td class="text-primary">{{$pro->name}}</td>
+                                        <td>{{$pro->description}}</td>
+                                        <td>{{$pro->unit_price}} LKR</td>
+                                        <td>{{$pro->qty}}</td>
+                                        <td>
+                                            <input type="button" class="btn btn-sm btn-primary" value="Edit" data-toggle="modal" data-target="#editModal-{{$pro->id}}">
+                                            <a href="/add-to-cart/{{$pro->id}}" class="btn btn-sm btn-success">Add to Cart</a>
+                                            <a href="/delete-product/{{$pro->id}}" class="btn btn-sm btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Edit Modal -->
+                                    <div class="modal fade" id="editModal-{{$pro->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Product Info</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{url('update-new-product')}}" method="POST">
+                                                        @csrf
+                                                        <input hidden type="text" name="product_id" value="{{$pro->id}}">
+                                                        <div class="mb-3">
+                                                            <label for="p_name_edit" class="form-label">Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="p_name_edit" name="p_name_edit" value="{{$pro->name}}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="unit_price_edit" class="form-label">Unit Price <span class="text-danger">*</span></label>
+                                                            <input type="number" class="form-control" id="unit_price_edit" name="unit_price_edit" value="{{$pro->unit_price}}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="qty_id_edit" class="form-label">Quantity <span class="text-danger">*</span></label>
+                                                            <input type="number" class="form-control col-2" id="qty_id_edit" name="qty_id_edit" value="{{$pro->qty}}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="description_edit" class="form-label">Description</label>
+                                                            <textarea class="form-control" id="description_edit" name="description_edit" rows="3">{{$pro->description}}</textarea>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="mb-3">
+                                                            <input type="submit" class="btn btn-primary shadow px-2" value="Update">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -99,183 +150,100 @@
 <script>
 
 $( document ).ready(function() {
-
-    // dob
-
+    cartCount();
 });
 
-$(function(){
-  $("#contact_number").on('input', function (e) {
-    $(this).val($(this).val().replace(/[^0-9]/g, ''));
-  });
-});
+function cartCount(){
+    $.ajax({
+        url: "/get-cart-count",
+        type: 'GET',
+        success: function(response) {
+
+            $('#cart_id').text(response.product_count);
+
+        }
+    });
+}
 
 function resetForm(){
 
-    $('#name_err').text("");
-    $('#email_err').text("");
-    $('#phone_err').text("");
-    $('#dob_err').text("");
-    $('#password_err').text("");
-    $('#first_name').css('border-color', '');
-    $('#last_name').css('border-color', '');
-    $('#email').css('border-color', '');
-    $('#contact_number').css('border-color', '');
-    $('#dob').css('border-color', '');
-    $('#password').css('border-color', '');
-    $('#con_password').css('border-color', '');
-    $('#user_form').trigger("reset");
+    $('#p_name_err').text("");
+    $('#price_err').text("");
+    $('#description_err').text("");
+
+    $('#p_name').css('border-color', '');
+    $('#unit_price').css('border-color', '');
+    $('#description').css('border-color', '');
+
+    $('#product_form').trigger("reset");
     $('html, body').animate({
         scrollTop: $("#page_starts").offset().top
     }, 500);
+
 }
 
 function submitForm(){
 
-    if(!$('#first_name').val()) {
+    if(!$('#p_name').val()) {
 
-        $('#name_err').text("Please enter your First name !");
-        $('#first_name').css('border-color', 'red');
+        $('#p_name').css('border-color', 'red');
+        $('#p_name_err').text("Please enter the Product Name !");
+
         $('html, body').animate({
             scrollTop: $("#page_starts").offset().top
         }, 500);
 
-    }else if(!$('#last_name').val()){
+    }else if(!$('#unit_price').val()){
 
-        $('#name_err').text("Please enter your Last name !");
-        $('#last_name').css('border-color', 'red');
+        $('#p_name').css('border-color', '');
+        $('#p_name_err').text("");
 
-        $('#first_name').css('border-color', '');
+        $('#unit_price').css('border-color', 'red');
+        $('#price_err').text("Please enter your Last name !");
+
         $('html, body').animate({
             scrollTop: $("#page_starts").offset().top
         }, 500);
 
-    }else if(!$('#email').val()){
+    }else if(!$('#qty_id').val()){
 
-        $('#name_err').text("");
-        $('#last_name').css('border-color', '');
-        $('#first_name').css('border-color', '');
+        $('#p_name').css('border-color', '');
+        $('#p_name_err').text("");
 
-        $('#email_err').text("Please enter the email !");
-        $('#email').css('border-color', 'red');
+        $('#unit_price').css('border-color', '');
+        $('#price_err').text("");
+
+        $('#qty_id').css('border-color', 'red');
+        $('#qty_err').text("Please enter Product Quantity !");
+
         $('html, body').animate({
             scrollTop: $("#page_starts").offset().top
         }, 500);
 
-    }else if(!$('#contact_number').val()){
+    }else if($('#qty_id').val()<1){
+        $('#p_name').css('border-color', '');
+        $('#p_name_err').text("");
 
-        $('#name_err').text("");
-        $('#email_err').text("");
-        $('#name_err').text("");
-        $('#last_name').css('border-color', '');
-        $('#first_name').css('border-color', '');
-        $('#email').css('border-color', '');
+        $('#unit_price').css('border-color', '');
+        $('#price_err').text("");
 
-        $('#phone_err').text("Please enter the contact number !");
-        $('#contact_number').css('border-color', 'red');
+        $('#qty_id').css('border-color', 'red');
+        $('#qty_err').text("Please enter valid Quantity !");
+
         $('html, body').animate({
             scrollTop: $("#page_starts").offset().top
         }, 500);
-
-    }else if(!$('#dob').val()){
-
-        $('#name_err').text("");
-        $('#email_err').text("");
-        $('#phone_err').text("");
-        $('#last_name').css('border-color', '');
-        $('#first_name').css('border-color', '');
-        $('#email').css('border-color', '');
-        $('#contact_number').css('border-color', '');
-
-        $('#dob_err').text("Please provide your date of birth !");
-        $('#dob').css('border-color', 'red');
-        $('html, body').animate({
-            scrollTop: $("#page_starts").offset().top
-        }, 500);
-
-    }else if(!$('#password').val()){
-
-        $('#name_err').text("");
-        $('#email_err').text("");
-        $('#phone_err').text("");
-        $('#dob_err').text("");
-        $('#last_name').css('border-color', '');
-        $('#first_name').css('border-color', '');
-        $('#email').css('border-color', '');
-        $('#contact_number').css('border-color', '');
-        $('#dob').css('border-color', '');
-
-        $('#password_err').text("Please enter the password !");
-        $('#password').css('border-color', 'red');
-        $('html, body').animate({
-            scrollTop: $("#first_name").offset().top
-        }, 200);
-
-    }else if(!$('#con_password').val()){
-
-        $('#name_err').text("");
-        $('#email_err').text("");
-        $('#phone_err').text("");
-        $('#dob_err').text("");
-        $('#last_name').css('border-color', '');
-        $('#first_name').css('border-color', '');
-        $('#email').css('border-color', '');
-        $('#contact_number').css('border-color', '');
-        $('#dob').css('border-color', '');
-        $('#password').css('border-color', '');
-
-        $('#password_err').text("Please enter the confirm password !");
-        $('#con_password').css('border-color', 'red');
-        $('html, body').animate({
-            scrollTop: $("#first_name").offset().top
-        }, 200);
-
-    }else if($('#password').val() !== $('#con_password').val()){
-
-        $('#name_err').text("");
-        $('#email_err').text("");
-        $('#phone_err').text("");
-        $('#dob_err').text("");
-        $('#last_name').css('border-color', '');
-        $('#first_name').css('border-color', '');
-        $('#email').css('border-color', '');
-        $('#contact_number').css('border-color', '');
-        $('#dob').css('border-color', '');
-        $('#password').css('border-color', '');
-        $('#con_password').css('border-color', '');
-
-        $('#password_err').text("Passwords does not match !");
-        $('html, body').animate({
-            scrollTop: $("#first_name").offset().top
-        }, 200);
-
     }else {
-        $('#name_err').text("");
-        $('#email_err').text("");
-        $('#phone_err').text("");
-        $('#dob_err').text("");
-        $('#password_err').text("");
 
-        var email = $('#email').val();
+        $('#price_err').text("");
+        $('#p_name_err').text("");
+        $('#qty_err').text("");
 
-        $.ajax({
-        url: "/check-email/"+email,
-        type: 'GET',
-        success: function(res) {
-            console.log(res);
+        $('#p_name').css('border-color', '');
+        $('#unit_price').css('border-color', '');
+        $('#qty_id').css('border-color', '');
 
-            if(res.count > 0){
-
-                $('#overall_err').text("Entered email is already exists !!");
-
-            }else {
-
-                $('#overall_err').text("");
-                $('#user_form').submit();
-            }
-
-        }
-        });
+        $('#product_form').submit();
 
     }
 }
